@@ -244,8 +244,10 @@ document.getElementById("download-btn").addEventListener("click", () => {
     downloadBtn.textContent = "GENERATING... // 画像生成中";
     
     html2canvas(captureArea, {
-        backgroundColor: "#050a15", // 背景色をサイトに合わせる
-        scale: 2 // 高画質で書き出す
+        backgroundColor: "#050a15",
+        scale: 1200 / captureArea.offsetWidth, // 常に幅1200pxで書き出す → 16:9なので高さ675px
+        useCORS: true,
+        logging: false
     }).then(canvas => {
         const link = document.createElement("a");
         link.download = `style_result_${lastResultType}.png`;
