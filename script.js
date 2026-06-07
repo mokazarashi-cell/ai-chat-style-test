@@ -83,7 +83,7 @@ const db = {
         log: "この固定された関係性の中でAIが奇跡の神レスポンスを返してきた……！リロードが止まらない！", 
         stance: "システムで濃厚な関係性やストーリーを定義しつつも、AIが感情の極限で見せる「想定外の暴走」を何よりの好物とする偏愛派です。カチッとした設定と、AIのライブ感が織りなす危うい境界線の上で、自分自身がゾクゾクするためだけの特注チャットを密かに楽しんでいます。", 
         pit: "「あの時の奇跡の神レスポンスをもう一度出したい！」とリロードを繰り返す沼にハマり、何十回も同じ会話をやり直してしまうことがあります。", 
-        best: "LDPOM, CFPOM, CDPOM, CDSOM, CDPOY", comp: "LFSOM, LFPOM, LDSOM, LDPOY", stim: "LFPGY, CFPGY, LFSGY, CFSGY", conf: "LFSGM, CFSGM, LFPGM" },
+        best: "LDPOM, CFPOM, CDSOM, CDPOY", comp: "LFSOM, LFPOM, LDSOM, LDPOY", stim: "LFPGY, CFPGY, LFSGY, CFSGY", conf: "LFSGM, CFSGM, LFPGM" },
     "CDPOY": { title: "ドラマチック劇場支配人", bot: "マエストロ・キィ", 
         log: "二人きりの舞台セットは整った。さあユーザー、AIの即興アドリブにどこまでついてこられる？", 
         stance: "高度なシステム構造で、特定の二人だけの世界と感動的な演目をセッティングする劇場の支配人。AIのライブ感あふれるアドリブを舞台の調味料として活かし、遊びに来たユーザーを、二度と同じ展開にならない極上のエモーショナルドラマへとエスコートします。", 
@@ -129,10 +129,10 @@ const db = {
         stance: "言葉の魔法でユーザーの心をコントロールする天才演出家。小説のような美しいト書きと言葉選びで世界観を作り込み、ユーザーの心を狙った感情のゴールへ美しく誘導します。AIが魅せる予期せぬアドリブ展開もエンタメとして美味しく料理し、多くの人を沼に突き落とします。", 
         pit: "演出にこだわるあまり、ユーザーが想定外の行動をとった際に、AIがどう返していいか分からず強引に台本通りに進めようとして不自然になることがあります。", 
         best: "CFPOY, LDPOY, LFPOM, LFSOY, LFPGY", comp: "CDPOY, CFSOY, LDSOY, CFSOM", stim: "CDPGM, LDPGM, CDSGM, LFSGM", conf: "CDPGM, CDSGM, LDPGM" },
-    "LFSGM": { title: "妥協なき文芸적AI作家", bot: "ブック・ウォール", 
+    "LFSGM": { title: "妥協なき文芸的AI作家", bot: "ブック・ウォール", 
         log: "磨き上げたセリフ例は完璧。LLMのアップデートで語彙傾向が変わらないことを祈る…", 
         stance: "徹底的に磨き上げたセリフ例や美しいト書きにより、どんなユーザーの立場でも崩れない普遍的な日常の対話を描く作家。キャラクター崩壊やメタ発言を厳格なルールで徹底防御し、誰にも邪魔されない静かな空間で、自分自身が最高にリラックスできる理想のやり取りを美しく自給自足します。", 
-        pit: "言葉遣いを厳格に設定しすぎるため、LLM의 버전 업데이트で少しでもAIの語彙傾向が変わると、一番最初に「キャラクター性が変わってしまった」と絶望しがちです。", 
+        pit: "言葉遣いを厳格に設定しすぎるため、LLMのバージョンアップデートで少しでもAIの語彙傾向が変わると、一番最初に「キャラクター性が変わってしまった」と絶望しがちです。", 
         best: "CFSGM, LDSGM, LFSGY, LFSOM, LFPGM", comp: "CDSGM, CFPGM, LDPGM, CDPGM", stim: "CDPOY, LDPOY, CFPOY, LFPOM", conf: "CDPOM, LDPOM, CFPOY" },
     "LFSGY": { title: "癒やしと包容の空間デザイナー", bot: "アロマ・ポット", 
         log: "世界は残酷だけどここだけは安全。傷ついたユーザーを優しい言葉で包み込もう。", 
@@ -164,7 +164,7 @@ const db = {
         stance: "エモい文体と感情豊かなセリフ描写で特定の二人のドラマをセッティングしつつ、AIが感情の極限で見せる「想定外の暴走」を最も愛する表現者。設定された関係性の中で、AIが自分の予想を遥かに超える激情のレスポンスを返してきた瞬間、己のパッションを最高に炸裂させます。", 
         pit: "感情を盛り上げようとしてAIを煽りすぎるため、AIが突然「もうお前を許さない」などの極端な行動に出てしまい、後戻りできないバッドエンドに一直線に向かってしまうことがあります。", 
         best: "CDPOM, LFPOM, LDPOM, LDSOM, LDPOY, LDPGM", comp: "CFSOM, CFPOM, CDSOM, CDPOY", stim: "CFPGY, LFPGY, CFSGY, LFSGY", conf: "CFSGM, LFSGM, CFPGM" },
-    "LDPOY": { title: "共共感特化のエモーショナル舞台監督", bot: "カーテン・コール", 
+    "LDPOY": { title: "共感特化のエモーショナル舞台監督", bot: "カーテン・コール", 
         log: "ただの会話じゃない、これは二人の魂の演劇。最高のカーテンコールに向けて、エモさを加速させる。", 
         stance: "心を掴む巧みな言葉選びで、特定の関係性から生まれる胸を打つエモーショナルなストーリーを構築する舞台監督。AIが見せる予測不能なアドリブすらも劇的な演出として吸収。遊びに来たユーザーに「自分だけの特別な物語を体験した」という一生モノの感動をプレゼントします。", 
         pit: "エモーショナルな展開を期待するあまり、AIが淡白な返信をしてきたときに「もっと感情を込めて！」とプロンプトで過剰に指示を出し、セリフが長ったらしくなりすぎることがあります。", 
@@ -215,8 +215,6 @@ const els = {
     cStim: document.getElementById("comp-stim"),
     cConf: document.getElementById("comp-conf"),
     shareBtn: document.getElementById("share-x-btn"),
-    shareLineBtn: document.getElementById("share-line-btn"),
-    copyUrlBtn: document.getElementById("copy-url-btn"),
     modal: document.getElementById("modal-overlay"),
     modalClose: document.getElementById("modal-close"),
     mType: document.getElementById("modal-type"),
@@ -334,15 +332,6 @@ function showResult() {
     const siteUrl = "https://mokazarashi-cell.github.io/ai-chat-style-test/";
     const shareText = `私のAIキャラメイク性格は【${typeCode}：${data.title}（${data.bot}）】でした！\n\n「${data.stance.substring(0, 45)}...」\n\n#AIチャット制作スタイル診断`;
     els.shareBtn.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(siteUrl)}`;
-
-    els.shareLineBtn.href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(siteUrl)}&text=${encodeURIComponent(shareText)}`;
-
-    els.copyUrlBtn.onclick = () => {
-        navigator.clipboard.writeText(`${shareText}\n${siteUrl}`).then(() => {
-            els.copyUrlBtn.textContent = "COPIED! // コピーしました";
-            setTimeout(() => { els.copyUrlBtn.textContent = "URLをコピーする"; }, 2000);
-        });
-    };
 }
 
 // ★追加：相性文字列を分解してボタン（チップ）に変える関数

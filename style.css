@@ -276,7 +276,9 @@ body {
 #question-text {
     margin-bottom: 25px;
     line-height: 1.5;
-}/* --- これまでのCSSの下に追加 --- */
+}
+
+/* --- これまでのCSSの下に追加 --- */
 
 /* 結果詳細のグリッドレイアウト */
 .result-details-grid {
@@ -490,22 +492,6 @@ body {
     transform: translateY(-3px);
 }
 
-.archive-card img {
-    width: 80%;
-    max-width: 100px; /* 2列にしてもはみ出さないように少し縮小 */
-    border-radius: 8px;
-    margin-bottom: 10px;
-    border: 1px solid var(--sub-blue);
-}
-
-.archive-card .bot-name {
-    color: var(--text-white);
-    font-size: 13px;
-    font-weight: bold;
-    margin: 0;
-}
-
-/* 図鑑一覧のサムネイル画像 */
 .archive-card img {
     width: 80%;
     max-width: 120px;
