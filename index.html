@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AIチャット制作スタイル診断</title>
+    <title>AIキャラメイク性格診断</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="app-container">
         <div id="start-screen" class="screen active">
             <img src="images/top.png" alt="トップバナー" class="top-banner">
-            <h1 class="cyber-title">AIチャット制作スタイル診断</h1>
-            <p class="description">全15問の質問から、あなたの制作スタイルを32タイプで解析します。</p>
+            <h1 class="cyber-title">AIキャラメイク性格診断</h1>
+            <p class="description">全15問の質問からあなたの制作スタイルを32タイプで解析します。</p>
             
             <div class="axis-explanation">
-                <h2>5つの指標（パラメーター）</h2>
+                <h2>5つの指標からあなたの制作スタイルを解析</h2>
                 <div class="axis-item"><span class="axis-label">① 設計</span><p><strong>構造派(C)</strong>：コード重視 / <strong>文体派(L)</strong>：ト書き重視</p></div>
                 <div class="axis-item"><span class="axis-label">② 対象</span><p><strong>汎用型(F)</strong>：全方位受容 / <strong>固定型(D)</strong>：特定関係性重視</p></div>
                 <div class="axis-item"><span class="axis-label">③ 展開</span><p><strong>シナリオ(P)</strong>：ギミック誘導 / <strong>サンドボックス(S)</strong>：終わらない日常</p></div>
-                <div class="axis-item"><span class="axis-label">④ 制御</span><p><strong>堅牢型(G)</strong>：徹底防御 / <strong>寛容型(O)</strong>：ライブ感浅容</p></div>
-                <div class="axis-item"><span class="axis-label">⑤ 動機</span><p><strong>自給自足(M)</strong>：己の理想 / <strong>おもてなし(Y)</strong>：ユーザー体験</p></div>
+                <div class="axis-item"><span class="axis-label">④ 制御</span><p><strong>堅牢型(G)</strong>：徹底防御 / <strong>寛容型(O)</strong>：ブレ込みで楽しむ</p></div>
+                <div class="axis-item"><span class="axis-label">⑤ 動機</span><p><strong>自給自足(M)</strong>：己の理想 / <strong>おもてなし(Y)</strong>：ユーザー体験重視</p></div>
             </div>
 
             <button id="start-btn" class="cyber-btn">SYSTEM START // 解析を開始する</button>
@@ -67,6 +67,9 @@
             </div>
             
             <a id="share-x-btn" class="cyber-btn share-btn" target="_blank" rel="noopener noreferrer">𝕏 で解析結果をシェア</a>
+            <a id="share-line-btn" class="cyber-btn line-btn" target="_blank" rel="noopener noreferrer">LINE で友達に送る</a>
+            <button id="copy-url-btn" class="cyber-btn copy-btn">URLをコピーする</button>
+            
             <button id="restart-btn" class="cyber-btn sub-btn">REBOOT // 最初からやり直す</button>
             <button id="result-to-archive-btn" class="cyber-btn sub-btn">DATABASE // 図鑑を見る</button>
         </div>

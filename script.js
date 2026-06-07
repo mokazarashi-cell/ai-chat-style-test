@@ -215,6 +215,8 @@ const els = {
     cStim: document.getElementById("comp-stim"),
     cConf: document.getElementById("comp-conf"),
     shareBtn: document.getElementById("share-x-btn"),
+    shareLineBtn: document.getElementById("share-line-btn"),
+    copyUrlBtn: document.getElementById("copy-url-btn"),
     modal: document.getElementById("modal-overlay"),
     modalClose: document.getElementById("modal-close"),
     mType: document.getElementById("modal-type"),
@@ -305,8 +307,18 @@ function showResult() {
     generateChips(els.cStim, data.stim);
     generateChips(els.cConf, data.conf);
 
-    const shareText = `私のAIチャット制作スタイルは【${typeCode}：${data.title}（${data.bot}）】でした！\n\n「${data.stance.substring(0, 45)}...」\n\n#AIチャット制作スタイル診断`;
-    els.shareBtn.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+    const siteUrl = "https://mokazarashi-cell.github.io/ai-chat-style-test/";
+    const shareText = `私のAIキャラメイク性格は【${typeCode}：${data.title}（${data.bot}）】でした！\n\n「${data.stance.substring(0, 45)}...」\n\n#AIチャット制作スタイル診断`;
+    els.shareBtn.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(siteUrl)}`;
+
+    els.shareLineBtn.href = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(siteUrl)}&text=${encodeURIComponent(shareText)}`;
+
+    els.copyUrlBtn.onclick = () => {
+        navigator.clipboard.writeText(`${shareText}\n${siteUrl}`).then(() => {
+            els.copyUrlBtn.textContent = "COPIED! // コピーしました";
+            setTimeout(() => { els.copyUrlBtn.textContent = "URLをコピーする"; }, 2000);
+        });
+    };
 }
 
 // ★追加：相性文字列を分解してボタン（チップ）に変える関数

@@ -379,6 +379,36 @@ body {
     color: #fff;
 }
 
+/* LINEボタン */
+.line-btn {
+    background: #06C755;
+    border-color: #05a546;
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 12px 0;
+}
+.line-btn:hover {
+    background: #05a546;
+    border-color: #06C755;
+    box-shadow: 0 0 15px rgba(6, 199, 85, 0.5);
+    color: #fff;
+}
+
+/* URLコピーボタン */
+.copy-btn {
+    border-color: var(--text-gray);
+    color: var(--text-gray);
+}
+.copy-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-white);
+}
+
 /* 図鑑（アーカイブ）画面 */
 /* ▼ タブコンテナをサイバーなパネル風に ▼ */
 .tab-container {
