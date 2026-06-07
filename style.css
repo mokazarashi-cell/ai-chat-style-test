@@ -604,3 +604,153 @@ body {
     color: var(--text-gray);
     font-family: 'Courier New', monospace;
 }
+
+/* 新しいトップコピーの装飾 */
+.hero-copy {
+    color: var(--text-gray);
+    font-size: 14.5px;
+    margin-bottom: 25px;
+    line-height: 1.7;
+}
+.hero-copy strong {
+    color: var(--main-blue);
+    font-size: 18px;
+    display: block;
+    margin-bottom: 12px;
+    text-shadow: 0 0 8px rgba(0, 243, 255, 0.4);
+    letter-spacing: 1px;
+}
+
+/* 5指標の折りたたみ（アコーディオン） */
+.axis-explanation-details {
+    background: rgba(0, 102, 255, 0.1);
+    border-left: 4px solid var(--main-blue);
+    margin-bottom: 30px;
+    text-align: left;
+    border-radius: 0 4px 4px 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+.axis-explanation-details summary {
+    color: var(--main-blue);
+    font-size: 14px;
+    font-weight: bold;
+    padding: 15px 20px;
+    cursor: pointer;
+    outline: none;
+    list-style: none; /* デフォルトの三角形を消す */
+    position: relative;
+    letter-spacing: 1px;
+}
+/* カスタムの矢印デザイン */
+.axis-explanation-details summary::after {
+    content: "▼";
+    position: absolute;
+    right: 20px;
+    color: var(--main-blue);
+    font-size: 12px;
+    transition: transform 0.3s ease;
+}
+/* 開いた時に矢印を上に向ける */
+.axis-explanation-details[open] summary::after {
+    transform: rotate(180deg);
+}
+.axis-explanation-content {
+    padding: 0 20px 15px 20px;
+    font-size: 13px;
+    border-top: 1px dashed rgba(0, 243, 255, 0.3);
+    margin-top: 5px;
+    padding-top: 15px;
+    animation: fadeIn 0.4s ease-out;
+}
+
+/* --- Step 2 改善用の追加スタイル --- */
+
+/* 優先度B：進捗を強く見せる */
+.cyber-progress {
+    font-size: 22px;
+    font-weight: bold;
+    color: var(--main-blue);
+    text-shadow: 0 0 10px var(--glow-color);
+    letter-spacing: 2px;
+    margin: 10px 0 20px 0;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* 優先度A：シェアカードのデザイン */
+.capture-card {
+    background: linear-gradient(135deg, #050a15 0%, #0a1528 100%);
+    border: 2px solid var(--main-blue);
+    box-shadow: inset 0 0 20px rgba(0, 243, 255, 0.1), 0 0 15px rgba(0, 243, 255, 0.2);
+    border-radius: 12px;
+    padding: 25px 20px;
+    margin-bottom: 20px;
+    position: relative;
+}
+.card-header {
+    border-bottom: 1px solid rgba(0, 243, 255, 0.3);
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+}
+.card-type {
+    color: var(--main-blue);
+    font-size: 18px;
+    letter-spacing: 4px;
+    margin: 0 0 5px 0;
+}
+.card-title {
+    color: var(--text-white);
+    font-size: 22px;
+    margin: 0 0 5px 0;
+    text-shadow: 0 0 10px var(--glow-color);
+}
+.card-robot {
+    color: #00ffaa;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0;
+}
+.capture-log {
+    margin-top: 15px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    padding: 12px;
+}
+.card-watermark {
+    text-align: right;
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 1px;
+    margin-top: 10px;
+}
+
+/* 画像保存ボタンの目立たせ */
+.highlight-btn {
+    background: rgba(0, 243, 255, 0.1);
+    border: 2px solid var(--main-blue);
+    box-shadow: 0 0 15px var(--glow-color);
+    margin-bottom: 30px;
+}
+.highlight-btn:hover {
+    background: var(--main-blue);
+    color: #050a15;
+}
+
+/* 優先度B：図鑑のカードに「ひとこと」と「相性」を足す */
+.archive-desc {
+    font-size: 11.5px;
+    color: var(--text-gray);
+    margin: 8px 0;
+    line-height: 1.4;
+    text-align: left;
+}
+.archive-comp {
+    font-size: 11px;
+    color: #ffaa00;
+    background: rgba(255, 170, 0, 0.1);
+    padding: 3px 6px;
+    border-radius: 3px;
+    border: 1px solid rgba(255, 170, 0, 0.3);
+    width: 100%;
+    box-sizing: border-box;
+}

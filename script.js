@@ -19,7 +19,7 @@ const questions = [
     { text: "Q9. 自由なゲーム（マイクラなど）を遊ぶとき、どう楽しむ？", choices: [{ text: "A. ラスボス討伐や図鑑コンプなど、明確な目標を設定して進める", axis: "P", point: 2 }, { text: "B. 「このエリアに町を作る」など、自分なりのプロジェクトを完遂させる", axis: "P", point: 1 }, { text: "C. 特に目標は決めず、その日目についた作業をのんびりこなす", axis: "S", point: 1 }, { text: "D. ひたすら散歩するなど、目的のない自由を満喫する", axis: "S", point: 2 }] },
     // 軸4: 堅牢(G) vs 寛容(O)
     { text: "Q10. カーナビが「明らかに細くて怪しい裏道」を案内しました。どうする？", choices: [{ text: "A. 絶対に無視する。安全で確実な知っている大通りをそのまま進む", axis: "G", point: 2 }, { text: "B. 一瞬迷うが、リスクを避けて安全な道を選ぶ", axis: "G", point: 1 }, { text: "C. ちょっとワクワクしながら、ナビに従って裏道に入ってみる", axis: "O", point: 1 }, { text: "D. 「面白い展開になりそう！」と、さらに細い道へ冒険する", axis: "O", point: 2 }] },
-    { text: "Q11. 料理中、うっかりスパイスを分量より多く入れすぎてしまいました。", choices: [{ text: "A. レシピ通りにならないのは許せない。取り除くか作り直す", axis: "G", point: 2 }, { text: "B. 味見をして、他の調味料でどうにか元の理想の味に近づける", axis: "G", point: 1 }, { text: "C. 「まあいいか」とそのまま作り、どんな味になるか楽しみにする", axis: "O", point: 1 }, { text: "D. 「新メニューだ！」と開き原り、別のスパイスもさらに足す", axis: "O", point: 2 }] },
+    { text: "Q11. 料理中、うっかりスパイスを分量より多く入れすぎてしまいました。", choices: [{ text: "A. レシピ通りにならないのは許せない。取り除くか作り直す", axis: "G", point: 2 }, { text: "B. 味見をして、他の調味料でどうにか元の理想の味に近づける", axis: "G", point: 1 }, { text: "C. 「まあいいか」とそのまま作り、どんな味になるか楽しみにする", axis: "O", point: 1 }, { text: "D. 「新メニューだ！」と開き直り、別のスパイスもさらに足す", axis: "O", point: 2 }] },
     { text: "Q12. あなたは舞台に出演中。相手の役者が完全にセリフを忘れました。", choices: [{ text: "A. こっそり耳打ちして、台本通りの流れに強引に引き戻す", axis: "G", point: 2 }, { text: "B. 自分のセリフを少し変えて、元の展開に上手く誘導する", axis: "G", point: 1 }, { text: "C. 相手のアドリブに合わせて、その場のノリで会話を繋ぐ", axis: "O", point: 1 }, { text: "D. 台本は投げ捨てて、二人で全く違うシーンを即興で作り上げる", axis: "O", point: 2 }] },
     // 軸5: 自給自足(M) vs おもてなし(Y)
     { text: "Q13. めちゃくちゃ美味しい「隠れ家的なカフェ」を偶然見つけました。", choices: [{ text: "A. 誰にも教えず、自分だけの秘密のオアシスとして独占する", axis: "M", point: 2 }, { text: "B. 価値観が完全に一致する、ごく一部の親友にだけこっそり教える", axis: "M", point: 1 }, { text: "C. 「こんな素敵なお店があった！」と写真付きでSNSに投稿する", axis: "Y", point: 1 }, { text: "D. 「絶対気に入るから！」と、友達をたくさん誘って案内する", axis: "Y", point: 2 }] },
@@ -235,8 +235,28 @@ document.getElementById("result-to-archive-btn").addEventListener("click", () =>
 document.getElementById("back-home-btn").addEventListener("click", () => switchScreen("start"));
 document.getElementById("tab-c").addEventListener("click", (e) => { setTabActive(e.target); renderArchive("C"); });
 document.getElementById("tab-l").addEventListener("click", (e) => { setTabActive(e.target); renderArchive("L"); });
+// ▼ 画像ダウンロード機能のイベントリスナー ▼
+document.getElementById("download-btn").addEventListener("click", () => {
+    const captureArea = document.getElementById("capture-area");
+    const downloadBtn = document.getElementById("download-btn");
+    
+    // 処理中はボタンのテキストを変える
+    downloadBtn.textContent = "GENERATING... // 画像生成中";
+    
+    html2canvas(captureArea, {
+        backgroundColor: "#050a15", // 背景色をサイトに合わせる
+        scale: 2 // 高画質で書き出す
+    }).then(canvas => {
+        const link = document.createElement("a");
+        link.download = `style_result_${lastResultType}.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+        
+        // ボタンを元に戻す
+        downloadBtn.textContent = "SAVE IMAGE // 結果画像を保存する";
+    });
+});
 
-// ★追加：最新の結果に戻るボタンのイベント
 document.getElementById("start-resume-btn").addEventListener("click", () => switchScreen("result"));
 document.getElementById("archive-resume-btn").addEventListener("click", () => switchScreen("result"));
 
@@ -258,7 +278,11 @@ function switchScreen(targetScreen, callback = null) {
 function showQuestion() {
     const q = questions[currentQuestionIndex];
     els.qText.textContent = q.text;
-    els.progText.textContent = `ANALYSIS PROGRESS: ${currentQuestionIndex + 1} / ${questions.length}`;
+    
+    // ▼ ここを QUESTION 01 / 15 のような書式に変更
+    const qNum = String(currentQuestionIndex + 1).padStart(2, '0');
+    els.progText.textContent = `QUESTION ${qNum} / ${questions.length}`;
+    
     els.progBar.style.width = `${((currentQuestionIndex + 1) / questions.length) * 100}%`;
     
     els.choices.innerHTML = ""; 
@@ -360,6 +384,8 @@ function renderArchive(group) {
             card.innerHTML = `
                 <img src="images/${key}.png" alt="${db[key].bot}" onerror="this.src='images/top.png'">
                 <div class="bot-name">${db[key].bot}</div>
+                <div class="archive-desc">「${db[key].stance.substring(0, 22)}...」</div>
+                <div class="archive-comp">相性◎: ${db[key].best.split(',')[0]}</div>
             `;
             card.addEventListener("click", () => openModal(key));
             grid.appendChild(card);
