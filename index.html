@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIチャット制作スタイル診断</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app-container">
+        <div id="start-screen" class="screen active">
+            <img src="images/top.png" alt="トップバナー" class="top-banner">
+            <h1 class="cyber-title">AIチャット制作スタイル診断</h1>
+            <p class="description">全15問の質問から、あなたの制作スタイルを32タイプで解析します。</p>
+            
+            <div class="axis-explanation">
+                <h2>5つの指標（パラメーター）</h2>
+                <div class="axis-item"><span class="axis-label">① 設計</span><p><strong>構造派(C)</strong>：コード重視 / <strong>文体派(L)</strong>：ト書き重視</p></div>
+                <div class="axis-item"><span class="axis-label">② 対象</span><p><strong>汎用型(F)</strong>：全方位受容 / <strong>固定型(D)</strong>：特定関係性重視</p></div>
+                <div class="axis-item"><span class="axis-label">③ 展開</span><p><strong>シナリオ(P)</strong>：ギミック誘導 / <strong>サンドボックス(S)</strong>：終わらない日常</p></div>
+                <div class="axis-item"><span class="axis-label">④ 制御</span><p><strong>堅牢型(G)</strong>：徹底防御 / <strong>寛容型(O)</strong>：ライブ感浅容</p></div>
+                <div class="axis-item"><span class="axis-label">⑤ 動機</span><p><strong>自給自足(M)</strong>：己の理想 / <strong>おもてなし(Y)</strong>：ユーザー体験</p></div>
+            </div>
+
+            <button id="start-btn" class="cyber-btn">SYSTEM START // 解析を開始する</button>
+            <button id="start-resume-btn" class="cyber-btn resume-btn" style="display: none;">LATEST RESULT // 最新の解析結果に戻る</button>
+            <button id="view-archive-btn" class="cyber-btn sub-btn">DATABASE // 全32タイプ図鑑を見る</button>
+        </div>
+
+        <div id="question-screen" class="screen">
+            <div class="progress-bar-container"><div id="progress-bar"></div></div>
+            <p id="question-progress" class="cyber-text"></p>
+            <h2 id="question-text">質問テキスト</h2>
+            <div id="choices-container"></div>
+        </div>
+
+        <div id="result-screen" class="screen">
+            <h2 class="cyber-text">ANALYSIS COMPLETE</h2>
+            <h3 id="result-type">TYPE</h3>
+            <h1 id="result-title" class="cyber-title">タイトル</h1>
+            <p id="result-robot" class="cyber-text robot-name">ロボット名</p>
+            
+            <img id="result-image" src="" alt="結果画像" class="result-image">
+            
+            <div class="result-details-grid">
+                <div class="detail-box log-box">
+                    <h4>【脳内思考ログ】</h4>
+                    <p id="res-log" class="system-log-text"></p>
+                </div>
+                <div class="detail-box">
+                    <h4>【キャラクターづくりへの姿勢】</h4>
+                    <p id="res-stance"></p>
+                </div>
+                <div class="detail-box alert-box">
+                    <h4>【躓きやすいポイント】</h4>
+                    <p id="res-pitfall"></p>
+                </div>
+                <div class="detail-box compatibility-box">
+                    <h4>【相性データ】※タップで図鑑を開く</h4>
+                    <ul>
+                        <li><span class="tag best">共鳴する魂</span> <div id="comp-best" class="chip-container"></div></li>
+                        <li><span class="tag comp">相互補完</span> <div id="comp-comp" class="chip-container"></div></li>
+                        <li><span class="tag stim">刺激的な異文化</span> <div id="comp-stim" class="chip-container"></div></li>
+                        <li><span class="tag conf">すれ違い注意</span> <div id="comp-conf" class="chip-container"></div></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <a id="share-x-btn" class="cyber-btn share-btn" target="_blank" rel="noopener noreferrer">𝕏 で解析結果をシェア</a>
+            <button id="restart-btn" class="cyber-btn sub-btn">REBOOT // 最初からやり直す</button>
+            <button id="result-to-archive-btn" class="cyber-btn sub-btn">DATABASE // 図鑑を見る</button>
+        </div>
+
+        <div id="archive-screen" class="screen">
+            <h2 class="cyber-title">DATABASE // 全32タイプ図鑑</h2>
+            <div class="tab-container">
+                <button id="tab-c" class="tab-btn active">C群：構造・システム派</button>
+                <button id="tab-l" class="tab-btn">L群：文体・エディトリアル派</button>
+            </div>
+            <div id="archive-grid" class="archive-grid"></div>
+            
+            <button id="archive-resume-btn" class="cyber-btn resume-btn" style="display: none;">LATEST RESULT // 最新の解析結果に戻る</button>
+            <button id="back-home-btn" class="cyber-btn sub-btn">RETURN // トップへ戻る</button>
+        </div>
+
+        <div id="modal-overlay" class="modal-overlay">
+            <div class="modal-content">
+                <button id="modal-close" class="modal-close-btn">×</button>
+                <h3 id="modal-type" class="cyber-text">TYPE</h3>
+                <h2 id="modal-title" class="cyber-title">タイトル</h2>
+                <p id="modal-bot" class="robot-name">ロボット名</p>
+                <img id="modal-image" src="" alt="ロボット画像" class="modal-image">
+                
+                <div class="modal-details log-box" style="margin-bottom: 15px;">
+                    <h4>【脳内思考ログ】</h4>
+                    <p id="modal-log" class="system-log-text"></p>
+                </div>
+                <div class="modal-details">
+                    <h4>【キャラクターづくりへの姿勢】</h4>
+                    <p id="modal-stance"></p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
