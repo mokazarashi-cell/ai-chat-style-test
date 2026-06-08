@@ -399,12 +399,19 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
-    padding: 14px 15px;
+    gap: 22px;
+    padding: 18px 22px;
     color: var(--main-blue);
     font-size: 15px;
     font-weight: bold;
     border-bottom: 1px solid rgba(0, 243, 255, 0.3);
+}
+
+.collapsible-box > summary span {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding-right: 14px;
+    line-height: 1.45;
 }
 
 .collapsible-box > summary::-webkit-details-marker {
@@ -414,12 +421,14 @@ body {
 .collapsible-box > summary::after {
     content: "CLOSE";
     flex-shrink: 0;
-    padding: 3px 8px;
+    min-width: 68px;
+    padding: 6px 12px;
     border: 1px solid currentColor;
     border-radius: 4px;
     font-size: 10px;
     font-family: 'Courier New', monospace;
     font-weight: bold;
+    text-align: center;
     opacity: 0.8;
 }
 
@@ -433,7 +442,7 @@ body {
 
 .collapsible-box > p,
 .collapsible-box > ul {
-    padding: 0 15px 15px;
+    padding: 0 22px 22px;
 }
 
 .alert-box.collapsible-box > summary {
@@ -471,7 +480,7 @@ body {
 }
 
 .compatibility-box.collapsible-box > ul {
-    padding: 0 15px 15px;
+    padding: 0 22px 22px;
 }
 
 .compatibility-box li {
@@ -739,7 +748,7 @@ body {
 }
 
 .modal-details.collapsible-box > p {
-    padding: 0 15px 15px;
+    padding: 0 22px 22px;
 }
 
 .modal-details.log-box.collapsible-box > summary {
@@ -809,8 +818,19 @@ body.modal-lock {
 .hero-copy {
     color: var(--text-gray);
     font-size: 14.5px;
-    margin-bottom: 25px;
+    max-width: 540px;
+    margin: 0 auto 25px;
     line-height: 1.7;
+    text-align: center;
+    text-wrap: balance;
+}
+
+.hero-copy p {
+    margin: 0 0 12px;
+}
+
+.hero-copy p:last-child {
+    margin-bottom: 0;
 }
 .hero-copy strong {
     color: var(--main-blue);
@@ -1136,7 +1156,7 @@ body.modal-lock {
     }
 
     .hero-copy {
-        text-align: left;
+        text-align: center;
         font-size: 13.5px;
         line-height: 1.65;
         margin-bottom: 18px;
@@ -1180,6 +1200,32 @@ body.modal-lock {
     .result-details-box,
     .detail-box {
         padding: 13px;
+    }
+
+    .collapsible-box {
+        padding: 0;
+    }
+
+    .collapsible-box > summary {
+        gap: 16px;
+        padding: 15px 14px;
+    }
+
+    .collapsible-box > summary span {
+        padding-right: 8px;
+    }
+
+    .collapsible-box > summary::after {
+        min-width: 58px;
+        padding: 5px 8px;
+        font-size: 9px;
+    }
+
+    .collapsible-box > p,
+    .collapsible-box > ul,
+    .compatibility-box.collapsible-box > ul,
+    .modal-details.collapsible-box > p {
+        padding: 0 14px 16px;
     }
 
     .detail-box p,
