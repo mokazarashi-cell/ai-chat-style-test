@@ -810,6 +810,8 @@ const els = {
 };
 
 // イベントリスナー登録
+document.body.appendChild(els.modal);
+
 document.getElementById("start-btn").addEventListener("click", () => switchScreen("question", showQuestion));
 document.getElementById("restart-btn").addEventListener("click", resetGame);
 document.getElementById("view-archive-btn").addEventListener("click", () => { switchScreen("archive"); renderArchive("C"); });
@@ -860,8 +862,45 @@ document.getElementById("download-btn").addEventListener("click", async () => {
 document.getElementById("start-resume-btn").addEventListener("click", () => switchScreen("result"));
 document.getElementById("archive-resume-btn").addEventListener("click", () => switchScreen("result"));
 
-els.modalClose.addEventListener("click", () => els.modal.classList.remove("active"));
-els.modal.addEventListener("click", (e) => { if (e.target === els.modal) els.modal.classList.remove("active"); });
+els.modalClose.addEventListener("click", closeModal);
+els.modal.addEventListener("click", (e) => { if (e.target === els.modal) closeModal(); });
+
+function formatReadableText(text) {
+    const source = String(text || "").replace(/\s+/g, " ").trim();
+    if (!source) return "";
+
+    const sentences = source.match(/[^。！？!?]+[。！？!?」』）)]*|[^。！？!?]+$/g) || [source];
+    const paragraphs = [];
+    let buffer = "";
+    let sentenceCount = 0;
+
+    sentences.forEach(sentence => {
+        const chunk = sentence.trim();
+        if (!chunk) return;
+
+        buffer += chunk;
+        sentenceCount++;
+
+        if (buffer.length >= 78 || sentenceCount >= 2) {
+            paragraphs.push(buffer);
+            buffer = "";
+            sentenceCount = 0;
+        }
+    });
+
+    if (buffer) paragraphs.push(buffer);
+    return paragraphs.join("\n\n");
+}
+
+function setReadableText(element, text) {
+    element.textContent = formatReadableText(text);
+}
+
+function closeModal() {
+    els.modal.classList.remove("active");
+    document.documentElement.classList.remove("modal-lock");
+    document.body.classList.remove("modal-lock");
+}
 
 function switchScreen(targetScreen, callback = null) {
     Object.values(screens).forEach(s => s.classList.remove("active"));
@@ -921,13 +960,13 @@ function showResult() {
     els.rRobot.textContent = `TYPE NAME: ${data.bot}`;
     els.rImg.src = `images/${typeCode}.png`;
     
-    els.rLog.textContent = data.log; // 思考ログをセット
+    setReadableText(els.rLog, data.log); // 思考ログをセット
     renderRatings(els.rRatings, data.ratings);
-    els.rSummary.textContent = data.summary;
-    els.rStance.textContent = data.stance;
-    els.rStrength.textContent = data.strength;
-    els.rPit.textContent = data.pit;
-    els.rTip.textContent = data.tip;
+    setReadableText(els.rSummary, data.summary);
+    setReadableText(els.rStance, data.stance);
+    setReadableText(els.rStrength, data.strength);
+    setReadableText(els.rPit, data.pit);
+    setReadableText(els.rTip, data.tip);
     
     // ★追加：相性データをクリック可能なチップとして生成
     generateChips(els.cBest, data.best);
@@ -1031,10 +1070,14 @@ function openModal(typeCode) {
     els.mTitle.textContent = data.title;
     els.mBot.textContent = `TYPE NAME: ${data.bot}`;
     els.mImg.src = `images/${typeCode}.png`;
-    els.mLog.textContent = data.log; // モーダル側にも思考ログをセット
-    els.mSummary.textContent = data.summary;
-    els.mStance.textContent = data.stance;
-    els.mStrength.textContent = data.strength;
+    setReadableText(els.mLog, data.log); // モーダル側にも思考ログをセット
+    setReadableText(els.mSummary, data.summary);
+    setReadableText(els.mStance, data.stance);
+    setReadableText(els.mStrength, data.strength);
     
     els.modal.classList.add("active");
+    document.documentElement.classList.add("modal-lock");
+    document.body.classList.add("modal-lock");
+    els.modal.scrollTop = 0;
+    els.modal.querySelector(".modal-content").scrollTop = 0;
 }
