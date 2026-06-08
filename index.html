@@ -4,8 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AIキャラメイク性格診断</title>
+    <meta name="description" content="15問で、あなたのAIキャラメイク癖を32タイプのロボットとして診断します。">
+    <link rel="canonical" href="https://mokazarashi-cell.github.io/ai-chat-style-test/">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mokazarashi-cell.github.io/ai-chat-style-test/">
+    <meta property="og:title" content="AIキャラメイク性格診断">
+    <meta property="og:description" content="15問で、あなたのAIキャラメイク癖を32タイプのロボットとして診断します。">
+    <meta property="og:image" content="https://mokazarashi-cell.github.io/ai-chat-style-test/images/top.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AIキャラメイク性格診断">
+    <meta name="twitter:description" content="15問で、あなたのAIキャラメイク癖を32タイプのロボットとして診断します。">
+    <meta name="twitter:image" content="https://mokazarashi-cell.github.io/ai-chat-style-test/images/top.png">
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
     <div id="app-container">
@@ -66,7 +76,9 @@
             
             <div id="capture-area" class="capture-card">
                 <div class="capture-left">
-                    <img id="result-image" src="" alt="結果画像" class="result-image">
+                    <div class="capture-image-panel">
+                        <img id="result-image" src="" alt="結果画像" class="result-image">
+                    </div>
                 </div>
                 <div class="capture-right">
                     <div class="card-header">
@@ -82,6 +94,7 @@
                 </div>
             </div>
             <button id="download-btn" class="cyber-btn highlight-btn">SAVE IMAGE // 結果画像を保存する</button>
+            <p class="cyber-text download-note">※スマホアプリ内ブラウザ等で画像保存が動かない場合は、お手数ですが画面を直接スクリーンショットしてください。</p>
 
             <div class="result-details-grid">
                 <div class="detail-box intro-box">
@@ -174,6 +187,7 @@
         </footer>
 
     </div>
+    <button id="back-to-top" class="back-to-top-btn" type="button" aria-label="ページトップへ" title="ページトップへ">↑</button>
     <script src="script.js"></script>
 </body>
 </html>

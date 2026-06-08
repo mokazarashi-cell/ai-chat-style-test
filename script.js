@@ -811,6 +811,20 @@ const els = {
 
 // イベントリスナー登録
 document.body.appendChild(els.modal);
+enhanceCollapsibleSections();
+
+const backToTopBtn = document.getElementById("back-to-top");
+if (backToTopBtn) {
+    const updateBackToTop = () => {
+        backToTopBtn.classList.toggle("visible", window.scrollY > 360);
+    };
+
+    backToTopBtn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+    window.addEventListener("scroll", updateBackToTop, { passive: true });
+    updateBackToTop();
+}
 
 document.getElementById("start-btn").addEventListener("click", () => switchScreen("question", showQuestion));
 document.getElementById("restart-btn").addEventListener("click", resetGame);
@@ -821,49 +835,230 @@ document.getElementById("tab-c").addEventListener("click", (e) => { setTabActive
 document.getElementById("tab-l").addEventListener("click", (e) => { setTabActive(e.target); renderArchive("L"); });
 // ▼ 画像ダウンロード機能のイベントリスナー ▼
 document.getElementById("download-btn").addEventListener("click", async () => {
-    const captureArea = document.getElementById("capture-area");
     const downloadBtn = document.getElementById("download-btn");
-
-    if (typeof html2canvas !== "function") {
-        downloadBtn.textContent = "SAVE ERROR // ページを再読み込みしてください";
-        setTimeout(() => { downloadBtn.textContent = "SAVE IMAGE // 結果画像を保存する"; }, 2500);
-        return;
-    }
     
     // 処理中はボタンのテキストを変える
     downloadBtn.textContent = "GENERATING... // 画像生成中";
 
-    if (els.rImg && !els.rImg.complete) {
-        await new Promise(resolve => {
-            els.rImg.onload = resolve;
-            els.rImg.onerror = resolve;
-        });
-    }
-    
-    html2canvas(captureArea, {
-        backgroundColor: "#050a15",
-        scale: 1200 / captureArea.offsetWidth, // 常に幅1200pxで書き出す → 16:9なので高さ675px
-        useCORS: true,
-        logging: false
-    }).then(canvas => {
+    try {
+        const canvas = await createResultCanvas(lastResultType);
         const link = document.createElement("a");
         link.download = `style_result_${lastResultType}.png`;
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-        
+
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/png"));
+        if (blob) {
+            const url = URL.createObjectURL(blob);
+            link.href = url;
+            link.click();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+        } else {
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+        }
+
         // ボタンを元に戻す
         downloadBtn.textContent = "SAVE IMAGE // 結果画像を保存する";
-    }).catch(() => {
+    } catch (error) {
+        console.error(error);
         downloadBtn.textContent = "SAVE ERROR // もう一度お試しください";
         setTimeout(() => { downloadBtn.textContent = "SAVE IMAGE // 結果画像を保存する"; }, 2500);
-    });
+    }
 });
+
+async function createResultCanvas(typeCode) {
+    if (!typeCode || !db[typeCode]) {
+        throw new Error("No result type selected.");
+    }
+
+    if (document.fonts && document.fonts.ready) {
+        await document.fonts.ready;
+    }
+
+    const data = db[typeCode];
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    const width = 1200;
+    const height = 675;
+    canvas.width = width;
+    canvas.height = height;
+
+    const bg = ctx.createLinearGradient(0, 0, width, height);
+    bg.addColorStop(0, "#050a15");
+    bg.addColorStop(1, "#0a1528");
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.fillStyle = "rgba(0, 243, 255, 0.08)";
+    ctx.fillRect(0, 0, width, height);
+
+    drawRoundedRect(ctx, 4, 4, width - 8, height - 8, 40, "rgba(0, 0, 0, 0)", "#00f3ff", 6);
+    ctx.strokeStyle = "rgba(0, 243, 255, 0.28)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(420, 7);
+    ctx.lineTo(420, height - 7);
+    ctx.stroke();
+
+    const imagePanel = { x: 38, y: 38, w: 380, h: 607 };
+    drawRoundedRect(ctx, imagePanel.x, imagePanel.y, imagePanel.w, imagePanel.h, 18, "#ffffff", null, 0);
+
+    const robot = await loadCanvasImage(els.rImg.currentSrc || els.rImg.src || `images/${typeCode}.png`);
+    drawContainedImage(ctx, robot, imagePanel.x + 24, imagePanel.y + 24, imagePanel.w - 48, imagePanel.h - 48);
+
+    const rightCenter = 790;
+    drawCenteredText(ctx, typeCode, rightCenter, 74, 650, 42, "bold", "#00f3ff", false);
+    drawCenteredText(ctx, data.title, rightCenter, 145, 690, 46, "bold", "#ffffff", true);
+    drawCenteredText(ctx, `TYPE NAME: ${data.bot}`, rightCenter, 224, 690, 34, "bold", "#00ffaa", false);
+
+    ctx.strokeStyle = "rgba(0, 243, 255, 0.42)";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(455, 265);
+    ctx.lineTo(1160, 265);
+    ctx.stroke();
+
+    const ratingBox = { x: 455, y: 306, w: 705, h: 282 };
+    drawRoundedRect(ctx, ratingBox.x, ratingBox.y, ratingBox.w, ratingBox.h, 20, "rgba(255, 170, 0, 0.06)", "rgba(255, 170, 0, 0.48)", 4);
+
+    const ratings = data.ratings || [];
+    ratings.slice(0, 5).forEach((item, index) => {
+        const y = ratingBox.y + 55 + index * 45;
+        drawFittedText(ctx, item.label, ratingBox.x + 28, y, 365, 30, "bold", "rgba(255, 255, 255, 0.74)");
+        ctx.font = `bold 34px "Helvetica Neue", Arial, sans-serif`;
+        ctx.fillStyle = "#ffaa00";
+        ctx.shadowColor = "rgba(255, 170, 0, 0.55)";
+        ctx.shadowBlur = 10;
+        ctx.textAlign = "right";
+        ctx.textBaseline = "middle";
+        ctx.fillText("★".repeat(item.value) + "☆".repeat(5 - item.value), ratingBox.x + ratingBox.w - 28, y);
+        ctx.shadowBlur = 0;
+    });
+
+    ctx.font = `24px "Helvetica Neue", Arial, sans-serif`;
+    ctx.fillStyle = "rgba(255, 255, 255, 0.42)";
+    ctx.textAlign = "right";
+    ctx.textBaseline = "alphabetic";
+    ctx.fillText("AIキャラメイク性格診断", width - 38, height - 34);
+
+    return canvas;
+}
+
+function loadCanvasImage(src) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
+    });
+}
+
+function drawRoundedRect(ctx, x, y, w, h, r, fill, stroke, lineWidth) {
+    const radius = Math.min(r, w / 2, h / 2);
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + w - radius, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + radius);
+    ctx.lineTo(x + w, y + h - radius);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - radius, y + h);
+    ctx.lineTo(x + radius, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - radius);
+    ctx.lineTo(x, y + radius);
+    ctx.quadraticCurveTo(x, y, x + radius, y);
+    ctx.closePath();
+
+    if (fill) {
+        ctx.fillStyle = fill;
+        ctx.fill();
+    }
+
+    if (stroke) {
+        ctx.strokeStyle = stroke;
+        ctx.lineWidth = lineWidth;
+        ctx.stroke();
+    }
+}
+
+function drawContainedImage(ctx, img, x, y, w, h) {
+    const sourceWidth = img.naturalWidth || img.width;
+    const sourceHeight = img.naturalHeight || img.height;
+    const ratio = Math.min(w / sourceWidth, h / sourceHeight);
+    const drawWidth = sourceWidth * ratio;
+    const drawHeight = sourceHeight * ratio;
+    const drawX = x + (w - drawWidth) / 2;
+    const drawY = y + (h - drawHeight) / 2;
+    ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
+}
+
+function setCanvasFont(ctx, size, weight) {
+    ctx.font = `${weight} ${size}px "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", sans-serif`;
+}
+
+function fitFontSize(ctx, text, maxWidth, baseSize, minSize, weight) {
+    let size = baseSize;
+    while (size > minSize) {
+        setCanvasFont(ctx, size, weight);
+        if (ctx.measureText(text).width <= maxWidth) break;
+        size -= 1;
+    }
+    return size;
+}
+
+function drawCenteredText(ctx, text, x, y, maxWidth, baseSize, weight, color, glow) {
+    const size = fitFontSize(ctx, text, maxWidth, baseSize, 24, weight);
+    setCanvasFont(ctx, size, weight);
+    ctx.fillStyle = color;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.shadowColor = glow ? "rgba(0, 243, 255, 0.65)" : "transparent";
+    ctx.shadowBlur = glow ? 14 : 0;
+    ctx.fillText(text, x, y);
+    ctx.shadowBlur = 0;
+}
+
+function drawFittedText(ctx, text, x, y, maxWidth, baseSize, weight, color) {
+    const size = fitFontSize(ctx, text, maxWidth, baseSize, 20, weight);
+    setCanvasFont(ctx, size, weight);
+    ctx.fillStyle = color;
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    ctx.fillText(text, x, y);
+}
 
 document.getElementById("start-resume-btn").addEventListener("click", () => switchScreen("result"));
 document.getElementById("archive-resume-btn").addEventListener("click", () => switchScreen("result"));
 
 els.modalClose.addEventListener("click", closeModal);
 els.modal.addEventListener("click", (e) => { if (e.target === els.modal) closeModal(); });
+
+function enhanceCollapsibleSections() {
+    const boxes = document.querySelectorAll(".result-details-grid > .detail-box, .modal-details");
+
+    boxes.forEach(box => {
+        if (box.tagName.toLowerCase() === "details") return;
+
+        const heading = box.querySelector("h4");
+        if (!heading) return;
+
+        const details = document.createElement("details");
+        details.open = true;
+        details.className = `${box.className} collapsible-box`;
+        if (box.getAttribute("style")) {
+            details.setAttribute("style", box.getAttribute("style"));
+        }
+
+        const summary = document.createElement("summary");
+        const label = document.createElement("span");
+        label.textContent = heading.textContent;
+        summary.appendChild(label);
+        details.appendChild(summary);
+
+        Array.from(box.children).forEach(child => {
+            if (child !== heading) details.appendChild(child);
+        });
+
+        box.replaceWith(details);
+    });
+}
 
 function formatReadableText(text) {
     const source = String(text || "").replace(/\s+/g, " ").trim();
