@@ -13,18 +13,39 @@
             <img src="images/top.png" alt="トップバナー" class="top-banner">
             
             <div class="hero-copy">
-                <p><strong>あなたのキャラメイクOSを解析します。</strong></p>
-                <p>AIチャットキャラを作るあなたへ。<br>あなたは設定を緻密に組むタイプ？会話の空気感で魅せるタイプ？<br>15問で、あなたのキャラメイク癖を32タイプのロボットとして診断します。
+                <p><strong>あなたのAIキャラメイク性格を解析します。</strong></p>
+                <p>AIキャラを作るとき、あなたは設計図から固めるタイプ？ それとも言葉の空気感から命を吹き込むタイプ？<br>15問で、あなたのキャラメイク癖を32タイプのロボットとして診断します。</p>
             </div>
             
-            <details class="axis-explanation-details">
-                <summary>5つの解析パラメーター（詳しく見る）</summary>
+            <details class="axis-explanation-details" open>
+                <summary>診断で見る5つの軸</summary>
                 <div class="axis-explanation-content">
-                    <div class="axis-item"><span class="axis-label">① 設計</span><p><strong>構造派(C)</strong>：コード重視 / <strong>文体派(L)</strong>：ト書き重視</p></div>
-                    <div class="axis-item"><span class="axis-label">② 対象</span><p><strong>汎用型(F)</strong>：全方位受容 / <strong>固定型(D)</strong>：特定関係性重視</p></div>
-                    <div class="axis-item"><span class="axis-label">③ 展開</span><p><strong>シナリオ(P)</strong>：ギミック誘導 / <strong>サンドボックス(S)</strong>：終わらない日常</p></div>
-                    <div class="axis-item"><span class="axis-label">④ 制御</span><p><strong>堅牢型(G)</strong>：徹底防御 / <strong>寛容型(O)</strong>：ライブ感許容</p></div>
-                    <div class="axis-item"><span class="axis-label">⑤ 動機</span><p><strong>自給自足(M)</strong>：己の理想 / <strong>おもてなし(Y)</strong>：ユーザー体験</p></div>
+                    <p class="axis-lead">どちらが良い悪いではなく、キャラを作るときに自然と優先しやすい方向を見ています。</p>
+                    <div class="axis-item">
+                        <span class="axis-label">① 設計思想</span>
+                        <div class="axis-pair"><strong>C 構造派</strong><span>Markdown、タグ、条件分岐など、キャラが迷わない骨組みを重視。</span></div>
+                        <div class="axis-pair"><strong>L 文体派</strong><span>セリフ、ト書き、間、語尾など、読んだ瞬間の空気感を重視。</span></div>
+                    </div>
+                    <div class="axis-item">
+                        <span class="axis-label">② 対象</span>
+                        <div class="axis-pair"><strong>F 汎用型</strong><span>いろんなユーザー設定や話題を受け止める、入口の広さを重視。</span></div>
+                        <div class="axis-pair"><strong>D 固定型</strong><span>特定の関係性だからこそ生まれる、濃いドラマや距離感を重視。</span></div>
+                    </div>
+                    <div class="axis-item">
+                        <span class="axis-label">③ 展開</span>
+                        <div class="axis-pair"><strong>P シナリオ誘導型</strong><span>イベント、山場、フラグなど、物語が進む仕掛けを入れたい。</span></div>
+                        <div class="axis-pair"><strong>S サンドボックス型</strong><span>ゴールを決めすぎず、終わらない日常会話や寄り道を楽しみたい。</span></div>
+                    </div>
+                    <div class="axis-item">
+                        <span class="axis-label">④ 制御</span>
+                        <div class="axis-pair"><strong>G 堅牢型</strong><span>メタ発言やキャラ崩れを防ぎ、いつ話してもその子らしさを守る。</span></div>
+                        <div class="axis-pair"><strong>O 寛容型</strong><span>多少のブレや予想外の返答も、AIならではのライブ感として楽しむ。</span></div>
+                    </div>
+                    <div class="axis-item">
+                        <span class="axis-label">⑤ 原動力</span>
+                        <div class="axis-pair"><strong>M 自給自足型</strong><span>自分の理想、好き、性癖をできるだけ濃く形にしたい。</span></div>
+                        <div class="axis-pair"><strong>Y おもてなし型</strong><span>遊ぶ人の驚き、楽しさ、分かりやすさ、話しかけやすさを大切にする。</span></div>
+                    </div>
                 </div>
             </details>
 
@@ -53,11 +74,11 @@
                         <h1 id="result-title" class="card-title">タイトル</h1>
                         <p id="result-robot" class="card-robot">ロボット名</p>
                     </div>
-                    <div class="detail-box log-box capture-log">
+                    <div class="detail-box log-box capture-log" aria-hidden="true">
                         <p id="res-log" class="system-log-text"></p>
                     </div>
                     <div id="capture-ratings" class="capture-ratings"></div>
-                    <div class="card-watermark">AIチャット制作スタイル診断</div>
+                    <div class="card-watermark">AIキャラメイク性格診断</div>
                 </div>
             </div>
             <button id="download-btn" class="cyber-btn highlight-btn">SAVE IMAGE // 結果画像を保存する</button>
