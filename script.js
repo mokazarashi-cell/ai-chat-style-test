@@ -1061,30 +1061,79 @@ function enhanceCollapsibleSections() {
 }
 
 function formatReadableText(text) {
-    const source = String(text || "").replace(/\s+/g, " ").trim();
+    let source = String(text || "").trim();
     if (!source) return "";
 
-    const sentences = source.match(/[^。！？!?]+[。！？!?」』）)]*|[^。！？!?]+$/g) || [source];
-    const paragraphs = [];
-    let buffer = "";
-    let sentenceCount = 0;
+    // 脳内思考ログ：「 / 」区切りを1行ずつに展開
+    if (source.includes(" / ")) {
+        return source.split(" / ").map(s => s.trim()).filter(Boolean).join("\n");
+    }
 
-    sentences.forEach(sentence => {
-        const chunk = sentence.trim();
-        if (!chunk) return;
+    // 連続スペースを正規化（改行は後で処理するため\s+ではなく半角スペースのみ対象）
+    source = source.replace(/ {2,}/g, " ").trim();
 
-        buffer += chunk;
-        sentenceCount++;
+    // 「 ・」を「\n・」に変換して箇条書きを行分割
+    source = source.replace(/ ・/g, "\n・");
 
-        if (buffer.length >= 78 || sentenceCount >= 2) {
-            paragraphs.push(buffer);
-            buffer = "";
-            sentenceCount = 0;
+    const lines = source.split("\n").map(s => s.trim()).filter(Boolean);
+    const blocks = [];
+    let bulletGroup = [];
+
+    function flushBullets() {
+        if (bulletGroup.length > 0) {
+            blocks.push(bulletGroup.join("\n"));
+            bulletGroup = [];
+        }
+    }
+
+    function processText(block) {
+        const sentences = block.match(/[^。！？!?]+[。！？!?」』）)]*|[^。！？!?]+$/g) || [block];
+        let buf = "", cnt = 0;
+
+        sentences.forEach(s => {
+            const chunk = s.trim();
+            if (!chunk) return;
+
+            // 「〇つ目」番号項目は単独の段落にする
+            if (/^[0-9１-９]つ目/.test(chunk) || /^[一二三四五六七八九]つ目/.test(chunk)) {
+                if (buf) { blocks.push(buf); buf = ""; cnt = 0; }
+                blocks.push(chunk);
+                return;
+            }
+
+            buf += chunk;
+            cnt++;
+
+            if (buf.length >= 80 || cnt >= 2) {
+                blocks.push(buf);
+                buf = ""; cnt = 0;
+            }
+        });
+
+        if (buf) blocks.push(buf);
+    }
+
+    lines.forEach(line => {
+        if (line.startsWith("・")) {
+            // 箇条書き行：末尾に続きテキストが混在する場合（例：「・最後のitem 続きの文章」）を分離
+            const contStart = line.search(/ [^・]/);
+            if (contStart !== -1) {
+                bulletGroup.push(line.slice(0, contStart));
+                flushBullets();
+                const continuation = line.slice(contStart + 1).trim();
+                if (continuation) processText(continuation);
+            } else {
+                bulletGroup.push(line);
+            }
+        } else {
+            flushBullets();
+            processText(line);
         }
     });
 
-    if (buffer) paragraphs.push(buffer);
-    return paragraphs.join("\n\n");
+    flushBullets();
+
+    return blocks.join("\n\n");
 }
 
 function setReadableText(element, text) {
