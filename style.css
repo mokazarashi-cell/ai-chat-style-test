@@ -1058,18 +1058,24 @@ body.modal-lock {
     background: rgba(0, 243, 255, 0.1);
     border: 2px solid var(--main-blue);
     box-shadow: 0 0 15px var(--glow-color);
-    margin-bottom: 30px;
+    margin-bottom: 12px;
 }
-.highlight-btn:hover {
-    background: var(--main-blue);
-    color: #050a15;
+
+.fulltext-save-btn {
+    background: rgba(183, 255, 60, 0.07);
+    border-color: #b7ff3c;
+    color: #b7ff3c;
+    margin-bottom: 10px;
+    font-size: 13px;
 }
 
 .download-note {
     font-size: 11px;
     color: #ffaa00;
-    margin: -18px 0 24px;
+    margin: 8px 0 24px;
     line-height: 1.6;
+    display: block;
+    clear: both;
 }
 
 .back-to-top-btn {
@@ -1273,7 +1279,102 @@ body.modal-lock {
     }
 }
 
-@media (max-width: 520px) {
+/* 全文画像保存ボタン */
+.fulltext-save-btn {
+    background: rgba(183, 255, 60, 0.07);
+    border-color: #b7ff3c;
+    color: #b7ff3c;
+    margin-bottom: 6px;
+    font-size: 13px;
+}
+.fulltext-save-btn:hover {
+    background: #b7ff3c;
+    color: var(--bg-color);
+    box-shadow: 0 0 18px rgba(183, 255, 60, 0.5);
+}
+
+/* 全文コピーセクション */
+.copy-text-section {
+    margin: 8px 0 0;
+}
+
+.copy-full-btn {
+    background: rgba(0, 255, 170, 0.07);
+    border-color: #00ffaa;
+    color: #00ffaa;
+    font-size: 13px;
+    margin-bottom: 0;
+}
+.copy-full-btn:hover {
+    background: #00ffaa;
+    color: var(--bg-color);
+    box-shadow: 0 0 18px rgba(0, 255, 170, 0.5);
+}
+
+/* 折りたたみテキスト表示エリア */
+.copy-text-details {
+    margin-top: 8px;
+    border: 1px solid rgba(0, 255, 170, 0.25);
+    border-radius: 6px;
+    overflow: hidden;
+    background: rgba(0, 255, 170, 0.03);
+}
+
+.copy-text-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: rgba(0, 255, 170, 0.7);
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    letter-spacing: 0.04em;
+}
+.copy-text-summary::-webkit-details-marker { display: none; }
+.copy-text-summary::after {
+    content: "▼ OPEN";
+    font-size: 10px;
+    color: rgba(0, 255, 170, 0.5);
+    font-weight: bold;
+}
+.copy-text-details[open] .copy-text-summary::after {
+    content: "▲ CLOSE";
+}
+
+.result-fulltext-area {
+    display: block;
+    width: 100%;
+    min-height: 260px;
+    max-height: 420px;
+    background: rgba(5, 10, 21, 0.85);
+    border: none;
+    border-top: 1px solid rgba(0, 255, 170, 0.18);
+    color: #a8d8b0;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+    line-height: 1.7;
+    padding: 14px 16px;
+    resize: vertical;
+    outline: none;
+    box-sizing: border-box;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+.result-fulltext-area::selection {
+    background: rgba(0, 255, 170, 0.25);
+}
+
+@media (max-width: 640px) {
+    .copy-text-summary {
+        padding: 10px 12px;
+    }
+    .result-fulltext-area {
+        font-size: 11px;
+        min-height: 200px;
+    }
+}
     .capture-left {
         width: 35%;
         padding: 7px;
@@ -1337,4 +1438,3 @@ body.modal-lock {
         border-radius: 10px;
         padding: 6px;
     }
-}
