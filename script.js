@@ -1,5 +1,84 @@
 let currentQuestionIndex = 0;
 let scores = { C: 0, L: 0, F: 0, D: 0, P: 0, S: 0, G: 0, O: 0, M: 0, Y: 0 };
+let tieBreakQueue = [];
+let tieBreakAnswers = {};
+let tieBreakTotal = 0;
+
+const tieBreakQuestions = {
+    "C/L": {
+        text: "追加質問：古い洋館を一日だけ自由に改装できることになりました。最初に手を入れたいのは？",
+        choices: [
+            {
+                text: "A. 扉の立て付け、照明の位置、部屋の動線を整えて過ごしやすくする",
+                axis: "C"
+            },
+            {
+                text: "B. カーテン、香り、飾る花、差し込む光でその場所の空気を変える",
+                axis: "L"
+            }
+        ]
+    },
+
+    "F/D": {
+        text: "追加質問：小さな喫茶店を開くなら、どんなお店にしたい？",
+        choices: [
+            {
+                text: "A. 初めて来た人でも入りやすく、誰でも落ち着けるメニューを用意した店",
+                axis: "F"
+            },
+            {
+                text: "B. 分かる人には深く刺さるこだわりの席や裏メニューがある店",
+                axis: "D"
+            }
+        ]
+    },
+
+    "P/S": {
+        text: "追加質問：一冊だけノートを渡されて好きに使っていいと言われました。どう使う？",
+        choices: [
+            {
+                text: "A. 章立てや見出しを作って最後まで読み返せる記録にする",
+                axis: "P"
+            },
+            {
+                text: "B. その日の気分で落書きやメモを増やして気ままな雑記帳にする",
+                axis: "S"
+            }
+        ]
+    },
+
+    "G/O": {
+        text: "追加質問：手作りのゼンマイ人形が予定と少し違う動きをしました。あなたは？",
+        choices: [
+            {
+                text: "A. ネジを締め直して本来の動きに近づける",
+                axis: "G"
+            },
+            {
+                text: "B. その動きも味だと思ってしばらく眺めてみる",
+                axis: "O"
+            }
+        ]
+    },
+
+    "M/Y": {
+        text: "追加質問：小さな宝箱に最後のひとつだけ何かを入れるなら？",
+        choices: [
+            {
+                text: "A. 自分だけが意味を分かっているとっておきの宝物",
+                axis: "M"
+            },
+            {
+                text: "B. 開けた人が思わず笑顔になる小さな贈り物",
+                axis: "Y"
+            }
+        ]
+    }
+};
+
+function pairKey(left, right) {
+    return `${left}/${right}`;
+}
 
 // ★追加：最後に診断された結果を記憶する変数
 let lastResultType = null;
@@ -1645,19 +1724,89 @@ function showQuestion() {
     });
 }
 
+function startTieBreakOrShowResult() {
+    tieBreakQueue = getTiedAxisPairs();
+    tieBreakTotal = tieBreakQueue.length;
+
+    if (tieBreakQueue.length > 0) {
+        showTieBreakQuestion();
+    } else {
+        showResult();
+    }
+}
+
+function showTieBreakQuestion() {
+    const [left, right] = tieBreakQueue[0];
+    const key = pairKey(left, right);
+    const q = tieBreakQuestions[key];
+
+    const answeredCount = tieBreakTotal - tieBreakQueue.length + 1;
+
+    els.qText.textContent = q.text;
+    els.progText.textContent = `FINAL CALIBRATION ${String(answeredCount).padStart(2, "0")} / ${tieBreakTotal}`;
+    els.progBar.style.width = "100%";
+
+    els.choices.innerHTML = "";
+
+    q.choices.forEach(choice => {
+        const btn = document.createElement("button");
+        btn.textContent = choice.text;
+        btn.classList.add("cyber-btn");
+        btn.addEventListener("click", () => selectTieBreakAnswer(choice.axis));
+        els.choices.appendChild(btn);
+    });
+}
+
+function selectTieBreakAnswer(axis) {
+    const [left, right] = tieBreakQueue.shift();
+    const key = pairKey(left, right);
+
+    tieBreakAnswers[key] = axis;
+
+    if (tieBreakQueue.length > 0) {
+        showTieBreakQuestion();
+    } else {
+        showResult();
+    }
+}
+
 function selectAnswer(axis, point) {
     scores[axis] += point;
     currentQuestionIndex++;
-    if (currentQuestionIndex < questions.length) showQuestion(); 
-    else showResult(); 
+
+    if (currentQuestionIndex < questions.length) {
+        showQuestion();
+    } else {
+        startTieBreakOrShowResult();
+    }
+}
+
+function getTiedAxisPairs() {
+    const pairs = [
+        ["C", "L"],
+        ["F", "D"],
+        ["P", "S"],
+        ["G", "O"],
+        ["M", "Y"]
+    ];
+
+    return pairs.filter(([left, right]) => scores[left] === scores[right]);
+}
+
+function getAxisWinner(left, right) {
+    if (scores[left] > scores[right]) return left;
+    if (scores[right] > scores[left]) return right;
+
+    const key = pairKey(left, right);
+    return tieBreakAnswers[key] || left; // 念のための保険
 }
 
 function getTypeCodeFromScores() {
-    const t1 = (scores.C >= scores.L) ? "C" : "L";
-    const t2 = (scores.F >= scores.D) ? "F" : "D";
-    const t3 = (scores.P >= scores.S) ? "P" : "S";
-    const t4 = (scores.G >= scores.O) ? "G" : "O";
-    const t5 = (scores.M >= scores.Y) ? "M" : "Y";
+    const t1 = getAxisWinner("C", "L");
+    const t2 = getAxisWinner("F", "D");
+    const t3 = getAxisWinner("P", "S");
+    const t4 = getAxisWinner("G", "O");
+    const t5 = getAxisWinner("M", "Y");
     return t1 + t2 + t3 + t4 + t5;
 }
 
@@ -1765,6 +1914,11 @@ function generateChips(container, typeString) {
 function resetGame() {
     currentQuestionIndex = 0;
     scores = { C: 0, L: 0, F: 0, D: 0, P: 0, S: 0, G: 0, O: 0, M: 0, Y: 0 };
+
+    tieBreakQueue = [];
+    tieBreakAnswers = {};
+    tieBreakTotal = 0;
+
     clearTypeUrl();
     switchScreen("start");
 }
